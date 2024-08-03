@@ -9,13 +9,21 @@ app = FastAPI(
     version="0.1.0",
 )
 
+users = []
+
 
 @app.post("/add_user/")
 async def add_user(user: User):
+    users.append(user)
     return {
         "message": "User added successfully!",
         "user": user.email
     }
+
+
+@app.get("/get_users/")
+def get_users():
+    return users
 
 
 @app.get("/")
