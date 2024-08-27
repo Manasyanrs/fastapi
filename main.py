@@ -1,7 +1,8 @@
 import uvicorn
 from fastapi import FastAPI
 
-from models.user_model import User
+from users.views import router as user_router
+from items.views import router as item_router
 
 app = FastAPI(
     title="fastapi testing",
@@ -9,35 +10,17 @@ app = FastAPI(
     version="0.1.0",
 )
 
-users = []
-
-
-@app.post("/add_user/")
-async def add_user(user: User):
-    users.append(user)
-    return {
-        "message": "User added successfully!",
-        "user": user.email
-    }
-
-
-@app.get("/get_users/")
-def get_users():
-    return users
+app.include_router(user_router)
+app.include_router(item_router)
 
 
 @app.get("/")
 async def home_page():
     """
     home page info
-    :return:
+    :return: str
     """
     return {"Hello": "World"}
-
-
-@app.get("/items/{item_id}")
-async def get_item_by_id(item_id: int):
-    return {"item_id": item_id}
 
 
 if __name__ == "__main__":
